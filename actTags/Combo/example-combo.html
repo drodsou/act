@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body><div id="app"></div></body>
+<script type="module">
+  import {html, render, useState} from '../act.js';
+  import Combo from './combo.js';
+
+  function Comp() {
+    let [state, setState] = useState({
+      selected: '',
+      data: [
+        {id: 1, desc: "one"},
+        {id: 2, desc: "two"},
+        {id: 3, desc: "three"},
+        {id: 4, desc: "four"},
+        {id: 5, desc: "fIvé"},
+        {id: 6, desc: "six"},
+        {id: 7, desc: "seven"},
+        {id: 8, desc: "eight"},
+        {id: 9, desc: "nine"},
+        {id: 10, desc: "ten"},
+      ]
+    })
+
+    return html`
+      <div style=${{width:'400px'}}>
+        <p>${state.selected}</p>
+        <${Combo} data=${state.data} onSelect=${x=>{
+          console.log("seleccionaste", x);
+          setState( st=>({...st, selected: x.desc}) )
+        }} />
+      </div>
+    `;
+  }
+
+  render(html`<${Comp}/>`, document.querySelector("#app"));
+</script>
+</html>

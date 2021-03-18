@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    nav {border: 2px solid cyan;}
+    * { margin: 15px; }
+  </style>
+</head>
+<body>
+  <div id="app1"></div>
+  <hr />
+  <div id="app2"></div>
+</body>
+
+<script type="module">
+   import {tags, createTag, render, 
+    reactiveObj, forceUpdate, RENDERER} from '../act.js';
+  let {nav, button, span} = tags;
+
+  let r = reactiveObj({count:1});
+
+  const App1 = createTag((props)=>(
+    nav ( 
+      span (RENDERER),
+      button ( {onClick: ()=>r.count++},
+        'Count reactive: ', r.count
+      ),
+    )
+  ));
+
+  let countNonReactive = 2;
+  const App2 = createTag((props)=>(
+    nav ( 
+      span (RENDERER),
+      button ( {onClick: ()=>{countNonReactive++; forceUpdate() } },
+        'Count non reactive: ', countNonReactive
+      )
+    )
+  ));
+
+  render(App1,"#app1");  
+  render(App2,"#app2");  
+  
+</script>
+</html>

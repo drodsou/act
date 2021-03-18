@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    nav {
+      border: 2px solid cyan;
+    }
+
+    * {margin-left: 10px; font-size:26px;}
+
+    .special {
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+
+<script type="module">
+
+  import {tags, createTag, render, Component, RENDERER} from '../act.js';
+  let {button, nav, span} = tags;
+
+  // basic functional tag, right?
+  const CustomButton = createTag( (props) => (
+    button( 
+      'CustomButton: '
+    )
+  ));
+
+  // an now functional tag... with state!... and no hooks!!
+  // just add 'self' in tagDef arguments and 'opts' object
+  // when opts is present, the tag is converted to a class 
+  // under the hood and 'self' is the class 'this'
+  // so you can access state and setstate if you want
+  // but also plain non surprising data + forceUpdate.
+  const CounterA = createTag( (props, self) => (
+    button( 
+      {onClick: ()=>{self.data.count++; self.forceUpdate();} },
+      'CounterA: ', self.data.count
+    )
+  ), {data:{count:1}} );
+  
+  // or with just a bit more magic, $data is automatically 
+  // made reactive so you can avoid the explicit forceUpdate
+  const CounterB = createTag( (props, self) => (
+    button( 
+      {onClick: ()=>self.$data.count++ },
+      'CounterB: ', self.$data.count
+    )
+  ), {$data:{count:1}} );
+
+  const App = createTag((props)=>(
+    nav( 
+      span(RENDERER),
+      CustomButton(),
+      CounterA(),
+      CounterB()
+    )
+  ));
+
+
+
+  render(App,"#app");  
+
+
+
+  
+</script>
+</html>

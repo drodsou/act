@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body><div id="app"></div></body>
+<script type="module">
+  import {html, render, useState} from '../act.js';
+  import Combo from '../Combo/Combo.js';
+  import Spinnable from '../Spinnable/Spinnable.js';
+  import data from './data.js';
+
+  let app ={}
+  app.state = {
+    years : {
+      // all : null,
+      // selected: null,
+      // courses : { 
+      //   all: null
+      //   selected: null,
+      //   students: {
+      //     all: null
+      //     selected: null,
+      //   }
+      // }
+    }
+  }
+
+  function App() {
+  
+    // hidden, loading, selecting 
+    return html`
+      <div style=${{width:'400px'}}>
+
+        <p>Years</p>
+        <${Spinnable} state=${app.state.years.all?.length}>
+          <${Combo} data=${app.state.years.all} onSelect=${async selYear=>{
+              app.state.years.selected = selYear;
+              app.state.years.courses = {all:[]}
+              app.state.years.courses.all = await data.courses(selYear.id);
+              app.update();
+          }} />
+        </>
+        
+        <p>Courses</p>
+        <${Spinnable} state=${app.state.years.courses?.all?.length}>
+          <${Combo} data=${app.state.years.courses?.all} onSelect=${async selCourse=>{
+              app.state.years.courses.selected = selCourse;
+              app.state.years.courses.students = {all:[]}
+              app.state.years.courses.students.all = await data.students(selCourse.id);
+              app.update();
+          }} />
+        </>
+
+        <p>Students</p>
+        <${Spinnable} state=${app.state.years.courses?.students?.all?.length}>
+          <${Combo} data=${app.state.years.courses?.students?.all} onSelect=${async selStudent=>{
+              app.state.years.courses.students.selected = selStudent;
+              app.update();
+          }} />
+        </>
+
+        <!-- selected student -->
+        <div>Selected student: ${JSON.stringify(app.state.years.courses?.students?.selected)}</div>
+
+      </div>
+    `;
+  }
+
+  // -- update
+  app.update = () =>{
+    render(html`<${App}/>`, document.querySelector("#app"));
+  }
+
+  // -- init
+  ;(async ()=>{
+    app.state.years.all = [];
+    app.update();
+    app.state.years.all = await data.years();
+    app.update();
+  })();
+
+
+</script>
+</html>

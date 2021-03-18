@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body><div id="app"></div></body>
+<script type="module">
+  import SVGBox from './SVGBox.js';
+  import {tags, createTag} from '../../act/act.js';
+  const {div, style} = tags;
+
+  /*
+  - download svgs from e.g. https://material.io/resources/icons/?style=baseline and paste the svg code here.
+
+  - remove "height" and "width" attributes of the svg code so it fills the containing span
+  */
+  let icons = {
+    arrow : '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M8 5v14l11-7z"/></svg>',
+    spin : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19 8l-4 4h3c0 3.31-2.69 6-6 6-1.01 0-1.97-.25-2.8-.7l-1.46 1.46C8.97 19.54 10.43 20 12 20c4.42 0 8-3.58 8-8h3l-4-4zM6 12c0-3.31 2.69-6 6-6 1.01 0 1.97.25 2.8.7l1.46-1.46C15.03 4.46 13.57 4 12 4c-4.42 0-8 3.58-8 8H1l4 4 4-4H6z"/></svg>`
+  }
+
+  // -- maybe define a user friendly general Icon tag
+  const Icon = createTag((props) => (
+    SVGBox ({...props, innerHTML:icons[props.type]})
+  ));
+
+  // -- or specific ones
+  const IconArrow = createTag((props) => (
+    SVGBox ({fill:'red', width:'40px', innerHTML:icons.arrow, ...props})
+  ));
+
+  function App() {
+    return (
+      div (  
+        style (`
+          .spinning {
+            animation: spinning-anim 2s infinite linear;
+          }
+
+          @keyframes spinning-anim {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-359deg); }
+          }
+        `),
+        Icon ({type:'spin', fill:'green', width:'80px', class: 'spinning' }),
+        IconArrow(),
+        IconArrow({width:'20px'})
+      )
+    );
+  }
+
+  document.querySelector("#app").append(App());
+</script>
+</html>

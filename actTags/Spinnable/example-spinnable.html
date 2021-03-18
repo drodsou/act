@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body><div id="app"></div></body>
+<script type="module">
+  import Spinnable from './Spinnable.js';
+  import {tags, createTag, observable} from '../../act/act.js';
+  const {div, p, hr, button} = tags;
+
+  const Dummy = createTag((props)=>(
+    div({},'Dummy!')
+  ));
+
+  let app = {}
+
+  let countA = observable(0);
+  let o = observable(-1);
+  app.update = ()=>{
+    o(o()*-1)
+    console.log('updating...', o())
+  }
+
+  function App() {
+    return (
+      div ( {},
+        p ( {}, `app.data : ${()=>JSON.stringify(app.data)} : ${()=>String(app.data?.length)}`),
+        div ( {}, o ),
+        // div ( {}, countA, o),
+        // button ({onClick:()=>countA(countA()+1)}, 
+        //   countA
+        // ),
+        hr (),
+        Spinnable ( {state:app.data?.length},
+          Dummy()
+        )
+      )
+    );
+  }
+
+
+
+  app.data = observable([]);
+  document.querySelector("#app").append(App());
+
+  setInterval(()=>{
+    if (app.data() === undefined) { app.data([]) }
+    else if (app.data().length === 0)  { app.data(["data"]) }
+    else { app.data(undefined) }
+    // app.update()
+  },2000);
+
+</script>
+</html>

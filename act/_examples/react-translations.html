@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .special {
+      border-radius: 20px;
+      font-size: 26px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+
+<script type="module">
+
+  import {tags, createTag, render, RENDERER} from '../act.js';
+  let {button, nav, span} = tags;
+
+  // When RENDERER === 'react'
+  // 'class' prop is translated to 'className' 
+  // inline 'string style' is converted to obj so React doesnt complain
+  // so this will work both in preact and react
+  const App = createTag( (props) => (
+    button( 
+      {
+        class:'special', 
+        style:'border-radius: 20px; border: 2px solid red;'
+      },
+      'CustomButton'
+    )
+  ));
+
+  render(App,"#app");  
+
+
+
+  
+</script>
+</html>
