@@ -4,11 +4,11 @@
 
 // ---------------------------------------------------------------------
 // -- PREACT
-//import {createElement as h, Component, render as originalRender } from './_vendor/preact.js';
+import {createElement as h, Component, render as originalRender } from './_vendor/preact.js';
 
 // // -- REACT DEVELOPMENT 
-import {createElement as h, Component} from './_vendor/react.development.js';
-import {render as originalRender} from './_vendor/react-dom.development.js';
+// import {createElement as h, Component} from './_vendor/react.development.js';
+// import {render as originalRender} from './_vendor/react-dom.development.js';
 // ---------------------------------------------------------------------
 
 const RENDERER = h.name ==='createElementWithValidation' 
