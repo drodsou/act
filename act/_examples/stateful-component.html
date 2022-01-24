@@ -28,10 +28,20 @@
   //import {tags, createTag, render, Component, RENDERER} from '../act.min.js';
   let {button, nav, span} = tags;
 
-  // basic functional tag, right?
+  
+  // basic functional tag
   const CustomButton = createTag( (props) => (
     button( 
-      'CustomButton: '
+      'CustomButton '
+      )
+      ));
+      
+  // functional using external state
+  let externalCount = 1;
+  const CounterA = createTag( (props, self) => (
+    
+    button( {onClick: ()=>{externalCount++; self.forceUpdate();} },
+      'CounterA: ', externalCount
     )
   ));
 
@@ -41,28 +51,27 @@
   // under the hood and 'self' is the class 'this'
   // so you can access state and setstate if you want
   // but also plain non surprising data + forceUpdate.
-  const CounterA = createTag( (props, self) => (
-    button( 
-      {onClick: ()=>{self.data.count++; self.forceUpdate();} },
-      'CounterA: ', self.data.count
+  const CounterB = createTag( (props, self) => (
+    button( {onClick: ()=>{self.data.count++; self.forceUpdate();} },
+      'CounterB: ', self.data.count
     )
-  ), {data:{count:1}} );
+  ), {data:{count:2}} );
   
   // or with just a bit more magic, $data is automatically 
   // made reactive so you can avoid the explicit forceUpdate
-  const CounterB = createTag( (props, self) => (
-    button( 
-      {onClick: ()=>self.$data.count++ },
-      'CounterB: ', self.$data.count
+  const CounterC = createTag( (props, self) => (
+    button( {onClick: ()=>self.$data.count++ },
+      'CounterC: ', self.$data.count
     )
-  ), {$data:{count:1}} );
+  ), {$data:{count:3}} );
 
   const App = createTag((props)=>(
     nav( 
       span(RENDERER),
       CustomButton(),
       CounterA(),
-      CounterB()
+      CounterB(),
+      CounterC()
     )
   ));
 

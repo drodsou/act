@@ -24,7 +24,7 @@ function isClass(func) {
 /**
  * createTag
  */
-function createTag (tagDefOri, opts) {
+function createTag (tagDefOri, opts={}) {
   let tagDef = tagDefOri;
   if ( typeof tagDef === 'function' 
     && !isClass(tagDefOri) 
