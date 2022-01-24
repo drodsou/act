@@ -1,3 +1,7 @@
+# needs node >14
+printf "node version (needs v14+): "
+node --version
+
 rm ./act.min.*
 esbuild act.js --bundle --minify --format=esm --target=es2020 --outfile=act.min.js 
 gzip -k act.min.js
