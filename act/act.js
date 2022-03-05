@@ -11,6 +11,9 @@ import {createElement as h, Component, render as originalRender } from './_vendo
 // import {render as originalRender} from './_vendor/react-dom.development.js';
 // ---------------------------------------------------------------------
 
+
+
+
 const RENDERER = h.name ==='createElementWithValidation' 
   ? 'react' 
   : 'preact';
@@ -40,6 +43,7 @@ function createTag (tagDefOri, opts={}) {
         if (opts.$data) {
           this.$data = privateReactiveObj(opts.$data, this.forceUpdate)
         }
+        this.setState = this.setState.bind(this)
       }
       render (props) {
         return this.tagDef(props, this)
@@ -110,6 +114,7 @@ const allUpdaters = [];
 function render (tag, root) {
   let renderTag = tag; 
   let renderRoot = typeof(root === "string") ? document.querySelector(root) : root;
+  if (!renderRoot) {throw new Error(`act: render root element '${root}' not found `);}
   function update() {
     originalRender(renderTag(), renderRoot);
   }

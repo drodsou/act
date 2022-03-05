@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+  <div id="app"></div>
+  <script type="module">
+    import {tags, createTag, render} from '../dist/act-preact.min.js';
+    // import {tags, createTag, render} from '../act.js';
+    
+    // -- all standard html tags available
+    const {div, h1, button} = tags;
+  
+    // -- custom component
+    const Counter = createTag( (props, self) => (
+      button( {onClick: ()=>self.setState(s=>({count:s.count+1})) },
+        'Counter: ', self.state.count
+      )
+    ), {state:{count:5}});  // equivalent to class constructor 'this', accessed with `self` above
+
+    // -- main component
+    const App = createTag((props)=>(
+      div( 
+        h1('Act'),
+        Counter(),
+      )
+    ));
+  
+    // -- render (could have several ones)
+    render(App,"#app");  
+  </script>
+
+</body>
+</html>
